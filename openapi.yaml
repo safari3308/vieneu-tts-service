@@ -1,0 +1,228 @@
+openapi: 3.0.3
+info:
+  title: VieNeu-TTS Distributed Engine Secure API
+  description: >
+    HTTP/REST API for VieNeu-TTS neural Text-to-Speech (Vietnamese & English) and
+    automatic subtitle synchronization (ffsubsync), secured with Bearer Token
+    authentication. A matching gRPC API is served on port 50051 (see proto/tts/v1/tts.proto).
+  version: 2.0.0
+
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+  - url: http://192.168.1.50:8000
+    description: CoreOS VM server (Proxmox)
+
+paths:
+  /v1/audio/speech:
+    post:
+      summary: Text-to-Speech Conversion (TTS)
+      description: Accepts text, language, voice role, and speed to render a 16-bit mono PCM WAV audio stream (48kHz default).
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TTSRequest'
+      responses:
+        '200':
+          description: Audio rendered successfully. Returns a PCM_16 WAV binary stream.
+          headers:
+            X-Audio-Sample-Rate:
+              description: Output sample rate in Hz (default 48000).
+              schema:
+                type: integer
+            X-Audio-Duration-Seconds:
+              description: Rendered audio duration in seconds.
+              schema:
+                type: number
+          content:
+            audio/wav:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid request (empty text or out-of-range speed).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '403':
+          description: Access denied (invalid or missing Bearer token).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '503':
+          description: TTS engines are not loaded yet.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '500':
+          description: Internal server error during AI processing or audio rendering.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+
+  /v1/utils/subsync:
+    post:
+      summary: Subtitle Timing Synchronization
+      description: Synchronizes a target SRT file against a reference audio (.aac) or subtitle (.srt) file using ffsubsync.
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - target_sub
+                - reference_file
+                - ref_type
+              properties:
+                target_sub:
+                  type: string
+                  format: binary
+                  description: Target SRT file to synchronize.
+                reference_file:
+                  type: string
+                  format: binary
+                  description: Reference subtitle (.srt) or audio (.aac) file.
+                ref_type:
+                  type: string
+                  enum: [sub, audio]
+                  description: Type of reference_file.
+      responses:
+        '200':
+          description: Synchronized SRT content.
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Empty file upload or invalid ref_type.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '403':
+          description: Access denied (invalid or missing Bearer token).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+        '500':
+          description: ffsubsync execution error or timeout.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError'
+
+  /health:
+    get:
+      summary: Liveness Probe
+      responses:
+        '200':
+          description: Service process is alive.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /healthz:
+    get:
+      summary: Liveness Probe (Kubernetes convention)
+      responses:
+        '200':
+          description: Service process is alive.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /readyz:
+    get:
+      summary: Readiness Probe
+      responses:
+        '200':
+          description: TTS engines are loaded and ready to serve traffic.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadinessResponse'
+        '503':
+          description: TTS engines are still loading.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadinessResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Enter the `API_TOKEN` configured on the server.
+
+  schemas:
+    TTSRequest:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          minLength: 1
+          description: The text content to convert into speech.
+          example: "Hello everyone, the system is working successfully!"
+        lang:
+          type: string
+          description: Target speech language.
+          enum: [vi, en]
+          default: vi
+          example: vi
+        role:
+          type: string
+          description: Voice role (A = Primary voice, B = Secondary voice).
+          enum: [A, B]
+          default: A
+          example: A
+        speed:
+          type: number
+          format: float
+          minimum: 0.25
+          maximum: 4.0
+          default: 1.0
+          description: Speech speed multiplier.
+          example: 1.0
+
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+
+    ReadinessResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ready
+        engines_loaded:
+          type: boolean
+          example: true
+
+    APIError:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Error message detail returned from the system.
+          example: "Invalid or missing API token"

@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic-settings
+grpcio
+grpcio-tools
+grpcio-health-checking
+grpcio-reflection
+soundfile
+ffsubsync
+vieneu
