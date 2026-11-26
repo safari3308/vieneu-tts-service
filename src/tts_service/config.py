@@ -54,10 +54,10 @@ class Settings(BaseSettings):
     subsync_timeout_seconds: float = Field(default=300.0, gt=1.0)
 
     # Voice mappings (VieNeu-TTS preset voice names)
-    vi_voice_a: str = Field(default="Hải Đăng")
-    vi_voice_b: str = Field(default="Mai Anh")
-    en_voice_a: str = Field(default="Hải Đăng")
-    en_voice_b: str = Field(default="Mai Anh")
+    vi_voice_a: str = Field(default="Thiện Minh")
+    vi_voice_b: str = Field(default="Ngọc Huyền")
+    en_voice_a: str = Field(default="Thiện Minh")
+    en_voice_b: str = Field(default="Ngọc Huyền")
 
     # Logging
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = Field(default="INFO")

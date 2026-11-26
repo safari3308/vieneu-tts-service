@@ -23,7 +23,7 @@ async def test_synthesize_vietnamese_wav(
 
     assert result.sample_rate == 48000
     assert result.duration_seconds == pytest.approx(0.5, abs=0.01)
-    assert fake_engine.infer_calls == [("Xin chao", "Mai Anh", False)]
+    assert fake_engine.infer_calls == [("Xin chao", "Ngọc Huyền", False)]
 
     samples, sr = sf.read(io.BytesIO(result.audio_wav))
     assert sr == 48000
@@ -39,7 +39,7 @@ async def test_synthesize_english_wav(
     )
 
     assert result.sample_rate == 48000
-    assert fake_engine.infer_calls == [("Hello world", "Hải Đăng", False)]
+    assert fake_engine.infer_calls == [("Hello world", "Thiện Minh", False)]
     samples, sr = sf.read(io.BytesIO(result.audio_wav))
     assert sr == 48000
     assert len(samples) == 24000
@@ -74,7 +74,7 @@ async def test_synthesize_stream_yields_multiple_chunks(
         )
     ]
     assert len(chunks) == 2
-    assert fake_engine.stream_calls == [("Streaming test", "Mai Anh", False)]
+    assert fake_engine.stream_calls == [("Streaming test", "Ngọc Huyền", False)]
     # Each chunk is 12000 int16 samples (0.25s @ 48kHz) -> 24000 bytes
     assert all(len(c) == 24000 for c in chunks)
 

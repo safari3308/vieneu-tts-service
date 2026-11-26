@@ -216,10 +216,10 @@ docker run -d \
 | `MAX_CONCURRENT_TTS`      | `2`                         | Max concurrent TTS synthesis tasks                                          |
 | `MAX_CONCURRENT_SUBSYNC`  | `2`                         | Max concurrent `ffsubsync` processes                                        |
 | `SUBSYNC_TIMEOUT_SECONDS` | `300.0`                     | Timeout per `ffsubsync` invocation in seconds                               |
-| `VI_VOICE_A`              | `Hải Đăng`                  | VieNeu-TTS preset voice for Vietnamese role `A`                             |
-| `VI_VOICE_B`              | `Mai Anh`                   | VieNeu-TTS preset voice for Vietnamese role `B`                             |
-| `EN_VOICE_A`              | `Hải Đăng`                  | VieNeu-TTS preset voice for English role `A`                                |
-| `EN_VOICE_B`              | `Mai Anh`                   | VieNeu-TTS preset voice for English role `B`                                |
+| `VI_VOICE_A`              | `Thiện Minh`                | VieNeu-TTS preset voice for Vietnamese role `A`                             |
+| `VI_VOICE_B`              | `Ngọc Huyền`                | VieNeu-TTS preset voice for Vietnamese role `B`                             |
+| `EN_VOICE_A`              | `Thiện Minh`                | VieNeu-TTS preset voice for English role `A`                                |
+| `EN_VOICE_B`              | `Ngọc Huyền`                | VieNeu-TTS preset voice for English role `B`                                |
 | `LOG_LEVEL`               | `INFO`                      | `DEBUG`, `INFO`, `WARNING`, or `ERROR`                                      |
 
 ---
