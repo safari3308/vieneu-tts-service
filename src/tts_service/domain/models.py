@@ -28,3 +28,14 @@ class SynthesisResult:
     audio_wav: bytes
     sample_rate: int
     duration_seconds: float
+
+
+@dataclass(frozen=True, slots=True)
+class VoiceInfo:
+    """Metadata describing an available synthesis voice."""
+
+    id: str
+    name: str
+    languages: tuple[str, ...]
+    gender: str = ""
+    description: str = ""

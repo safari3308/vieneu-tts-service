@@ -59,6 +59,48 @@ class TTSGrpcServicer(tts_pb2_grpc.TTSServiceServicer):
         self._tts = tts_service
         self._subsync = subsync_service
 
+    async def GetInfo(
+        self,
+        request: tts_pb2.GetInfoRequest,
+        context: grpc.aio.ServicerContext,
+    ) -> tts_pb2.GetInfoResponse:
+        info = self._tts.service_info()
+        return tts_pb2.GetInfoResponse(
+            engine=info["engine"],
+            model=info["model"],
+            sample_rate=info["sample_rate"],
+            native_sample_rate=info["native_sample_rate"],
+            voices=info["voices"],
+        )
+
+    async def ListVoices(
+        self,
+        request: tts_pb2.ListVoicesRequest,
+        context: grpc.aio.ServicerContext,
+    ) -> tts_pb2.ListVoicesResponse:
+        try:
+            lang: Language | None = None
+            if request.lang != tts_pb2.LANGUAGE_UNSPECIFIED:
+                lang = _map_language(request.lang)
+            data = self._tts.list_voices(lang=lang)
+            return tts_pb2.ListVoicesResponse(
+                engine=data["engine"],
+                voices=[
+                    tts_pb2.VoiceInfo(
+                        id=v.id,
+                        name=v.name,
+                        languages=list(v.languages),
+                        gender=v.gender,
+                        description=v.description,
+                    )
+                    for v in data["voices"]
+                ],
+                default_voices=data["default_voices"],
+            )
+        except ValidationError as exc:
+            await context.abort(grpc.StatusCode.INVALID_ARGUMENT, str(exc))
+        raise AssertionError("unreachable")  # pragma: no cover
+
     async def Synthesize(
         self,
         request: tts_pb2.SynthesizeRequest,
@@ -68,12 +110,14 @@ class TTSGrpcServicer(tts_pb2_grpc.TTSServiceServicer):
             lang = _map_language(request.lang)
             role = _map_role(request.role)
             speed = request.speed if request.speed != 0.0 else 1.0
+            voice = request.voice.strip() if request.voice else None
 
             result = await self._tts.synthesize(
                 text=request.text,
                 lang=lang,
                 role=role,
                 speed=speed,
+                voice=voice,
             )
             return tts_pb2.SynthesizeResponse(
                 audio_wav=result.audio_wav,
@@ -97,6 +141,7 @@ class TTSGrpcServicer(tts_pb2_grpc.TTSServiceServicer):
             lang = _map_language(request.lang)
             role = _map_role(request.role)
             speed = request.speed if request.speed != 0.0 else 1.0
+            voice = request.voice.strip() if request.voice else None
 
             pending: bytes | None = None
             async for chunk in self._tts.synthesize_stream(
@@ -104,6 +149,7 @@ class TTSGrpcServicer(tts_pb2_grpc.TTSServiceServicer):
                 lang=lang,
                 role=role,
                 speed=speed,
+                voice=voice,
             ):
                 if pending is not None:
                     yield tts_pb2.AudioChunk(

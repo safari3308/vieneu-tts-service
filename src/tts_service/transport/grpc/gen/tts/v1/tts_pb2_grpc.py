@@ -34,6 +34,16 @@ class TTSServiceStub:
         Args:
             channel: A grpc.Channel.
         """
+        self.GetInfo = channel.unary_unary(
+                '/tts.v1.TTSService/GetInfo',
+                request_serializer=tts_dot_v1_dot_tts__pb2.GetInfoRequest.SerializeToString,
+                response_deserializer=tts_dot_v1_dot_tts__pb2.GetInfoResponse.FromString,
+                _registered_method=True)
+        self.ListVoices = channel.unary_unary(
+                '/tts.v1.TTSService/ListVoices',
+                request_serializer=tts_dot_v1_dot_tts__pb2.ListVoicesRequest.SerializeToString,
+                response_deserializer=tts_dot_v1_dot_tts__pb2.ListVoicesResponse.FromString,
+                _registered_method=True)
         self.Synthesize = channel.unary_unary(
                 '/tts.v1.TTSService/Synthesize',
                 request_serializer=tts_dot_v1_dot_tts__pb2.SynthesizeRequest.SerializeToString,
@@ -58,6 +68,20 @@ class TTSServiceStub:
 
 class TTSServiceServicer:
     """Missing associated documentation comment in .proto file."""
+
+    def GetInfo(self, request, context):
+        """Return active TTS engine/model metadata and sample-rate configuration.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ListVoices(self, request, context):
+        """List available voices (optionally filtered by language) and per-language defaults.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def Synthesize(self, request, context):
         """Synthesize text into a single complete PCM_16 WAV payload.
@@ -90,6 +114,16 @@ class TTSServiceServicer:
 
 def add_TTSServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
+            'GetInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetInfo,
+                    request_deserializer=tts_dot_v1_dot_tts__pb2.GetInfoRequest.FromString,
+                    response_serializer=tts_dot_v1_dot_tts__pb2.GetInfoResponse.SerializeToString,
+            ),
+            'ListVoices': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListVoices,
+                    request_deserializer=tts_dot_v1_dot_tts__pb2.ListVoicesRequest.FromString,
+                    response_serializer=tts_dot_v1_dot_tts__pb2.ListVoicesResponse.SerializeToString,
+            ),
             'Synthesize': grpc.unary_unary_rpc_method_handler(
                     servicer.Synthesize,
                     request_deserializer=tts_dot_v1_dot_tts__pb2.SynthesizeRequest.FromString,
@@ -120,6 +154,60 @@ def add_TTSServiceServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class TTSService:
     """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def GetInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/tts.v1.TTSService/GetInfo',
+            tts_dot_v1_dot_tts__pb2.GetInfoRequest.SerializeToString,
+            tts_dot_v1_dot_tts__pb2.GetInfoResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ListVoices(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/tts.v1.TTSService/ListVoices',
+            tts_dot_v1_dot_tts__pb2.ListVoicesRequest.SerializeToString,
+            tts_dot_v1_dot_tts__pb2.ListVoicesResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
 
     @staticmethod
     def Synthesize(request,

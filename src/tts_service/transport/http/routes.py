@@ -13,6 +13,7 @@ from fastapi.responses import StreamingResponse
 
 from tts_service.domain import (
     EngineNotReadyError,
+    Language,
     ReferenceType,
     SubsyncError,
     SynthesisError,
@@ -21,7 +22,14 @@ from tts_service.domain import (
 from tts_service.services import SubsyncService, TTSService
 
 from .auth import verify_bearer_token
-from .schemas import HealthResponse, ReadinessResponse, TTSRequest
+from .schemas import (
+    HealthResponse,
+    ListVoicesResponse,
+    ReadinessResponse,
+    ServiceInfoResponse,
+    TTSRequest,
+    VoiceInfoResponse,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -62,6 +70,7 @@ async def text_to_speech(
             lang=req.lang,
             role=req.role,
             speed=req.speed,
+            voice=req.voice,
         )
         return StreamingResponse(
             io.BytesIO(result.audio_wav),
@@ -119,6 +128,37 @@ async def sync_subtitle(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     except SubsyncError as exc:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(exc)) from exc
+
+
+@router.get("/v1/info", response_model=ServiceInfoResponse, tags=["Info"])
+async def service_info(request: Request) -> ServiceInfoResponse:
+    """Return active TTS engine/model metadata and sample-rate configuration."""
+    tts_service: TTSService = request.app.state.tts_service
+    return ServiceInfoResponse(**tts_service.service_info())
+
+
+@router.get("/v1/voices", response_model=ListVoicesResponse, tags=["Info"])
+async def list_voices(
+    request: Request,
+    lang: Language | None = None,
+) -> ListVoicesResponse:
+    """Return available voices (optionally filtered by language) and per-language defaults."""
+    tts_service: TTSService = request.app.state.tts_service
+    data = tts_service.list_voices(lang=lang)
+    return ListVoicesResponse(
+        engine=data["engine"],
+        voices=[
+            VoiceInfoResponse(
+                id=v.id,
+                name=v.name,
+                languages=list(v.languages),
+                gender=v.gender,
+                description=v.description,
+            )
+            for v in data["voices"]
+        ],
+        default_voices=data["default_voices"],
+    )
 
 
 @router.get("/health", response_model=HealthResponse, tags=["Health"])

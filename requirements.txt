@@ -9,3 +9,4 @@ grpcio-reflection
 soundfile
 ffsubsync
 vieneu
+kokoro

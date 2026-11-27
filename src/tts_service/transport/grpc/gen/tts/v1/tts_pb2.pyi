@@ -1,7 +1,8 @@
+from google.protobuf.internal import containers as _containers
 from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
-from collections.abc import Mapping as _Mapping
+from collections.abc import Iterable as _Iterable, Mapping as _Mapping
 from typing import ClassVar as _ClassVar, Optional as _Optional, Union as _Union
 
 DESCRIPTOR: _descriptor.FileDescriptor
@@ -34,16 +35,18 @@ REFERENCE_TYPE_SUB: ReferenceType
 REFERENCE_TYPE_AUDIO: ReferenceType
 
 class SynthesizeRequest(_message.Message):
-    __slots__ = ("text", "lang", "role", "speed")
+    __slots__ = ("text", "lang", "role", "speed", "voice")
     TEXT_FIELD_NUMBER: _ClassVar[int]
     LANG_FIELD_NUMBER: _ClassVar[int]
     ROLE_FIELD_NUMBER: _ClassVar[int]
     SPEED_FIELD_NUMBER: _ClassVar[int]
+    VOICE_FIELD_NUMBER: _ClassVar[int]
     text: str
     lang: Language
     role: VoiceRole
     speed: float
-    def __init__(self, text: _Optional[str] = ..., lang: _Optional[_Union[Language, str]] = ..., role: _Optional[_Union[VoiceRole, str]] = ..., speed: _Optional[float] = ...) -> None: ...
+    voice: str
+    def __init__(self, text: _Optional[str] = ..., lang: _Optional[_Union[Language, str]] = ..., role: _Optional[_Union[VoiceRole, str]] = ..., speed: _Optional[float] = ..., voice: _Optional[str] = ...) -> None: ...
 
 class SynthesizeResponse(_message.Message):
     __slots__ = ("audio_wav", "sample_rate", "duration_seconds")
@@ -96,3 +99,65 @@ class SyncSubtitleResponse(_message.Message):
     SYNCED_SRT_FIELD_NUMBER: _ClassVar[int]
     synced_srt: bytes
     def __init__(self, synced_srt: _Optional[bytes] = ...) -> None: ...
+
+class GetInfoRequest(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class GetInfoResponse(_message.Message):
+    __slots__ = ("engine", "model", "sample_rate", "native_sample_rate", "voices")
+    class VoicesEntry(_message.Message):
+        __slots__ = ("key", "value")
+        KEY_FIELD_NUMBER: _ClassVar[int]
+        VALUE_FIELD_NUMBER: _ClassVar[int]
+        key: str
+        value: str
+        def __init__(self, key: _Optional[str] = ..., value: _Optional[str] = ...) -> None: ...
+    ENGINE_FIELD_NUMBER: _ClassVar[int]
+    MODEL_FIELD_NUMBER: _ClassVar[int]
+    SAMPLE_RATE_FIELD_NUMBER: _ClassVar[int]
+    NATIVE_SAMPLE_RATE_FIELD_NUMBER: _ClassVar[int]
+    VOICES_FIELD_NUMBER: _ClassVar[int]
+    engine: str
+    model: str
+    sample_rate: int
+    native_sample_rate: int
+    voices: _containers.ScalarMap[str, str]
+    def __init__(self, engine: _Optional[str] = ..., model: _Optional[str] = ..., sample_rate: _Optional[int] = ..., native_sample_rate: _Optional[int] = ..., voices: _Optional[_Mapping[str, str]] = ...) -> None: ...
+
+class VoiceInfo(_message.Message):
+    __slots__ = ("id", "name", "languages", "gender", "description")
+    ID_FIELD_NUMBER: _ClassVar[int]
+    NAME_FIELD_NUMBER: _ClassVar[int]
+    LANGUAGES_FIELD_NUMBER: _ClassVar[int]
+    GENDER_FIELD_NUMBER: _ClassVar[int]
+    DESCRIPTION_FIELD_NUMBER: _ClassVar[int]
+    id: str
+    name: str
+    languages: _containers.RepeatedScalarFieldContainer[str]
+    gender: str
+    description: str
+    def __init__(self, id: _Optional[str] = ..., name: _Optional[str] = ..., languages: _Optional[_Iterable[str]] = ..., gender: _Optional[str] = ..., description: _Optional[str] = ...) -> None: ...
+
+class ListVoicesRequest(_message.Message):
+    __slots__ = ("lang",)
+    LANG_FIELD_NUMBER: _ClassVar[int]
+    lang: Language
+    def __init__(self, lang: _Optional[_Union[Language, str]] = ...) -> None: ...
+
+class ListVoicesResponse(_message.Message):
+    __slots__ = ("engine", "voices", "default_voices")
+    class DefaultVoicesEntry(_message.Message):
+        __slots__ = ("key", "value")
+        KEY_FIELD_NUMBER: _ClassVar[int]
+        VALUE_FIELD_NUMBER: _ClassVar[int]
+        key: str
+        value: str
+        def __init__(self, key: _Optional[str] = ..., value: _Optional[str] = ...) -> None: ...
+    ENGINE_FIELD_NUMBER: _ClassVar[int]
+    VOICES_FIELD_NUMBER: _ClassVar[int]
+    DEFAULT_VOICES_FIELD_NUMBER: _ClassVar[int]
+    engine: str
+    voices: _containers.RepeatedCompositeFieldContainer[VoiceInfo]
+    default_voices: _containers.ScalarMap[str, str]
+    def __init__(self, engine: _Optional[str] = ..., voices: _Optional[_Iterable[_Union[VoiceInfo, _Mapping]]] = ..., default_voices: _Optional[_Mapping[str, str]] = ...) -> None: ...

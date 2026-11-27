@@ -12,6 +12,8 @@ _PUBLIC_METHOD_PREFIXES = (
     "/grpc.health.v1.Health/",
     "/grpc.reflection.v1.ServerReflection/",
     "/grpc.reflection.v1alpha.ServerReflection/",
+    "/tts.v1.TTSService/GetInfo",
+    "/tts.v1.TTSService/ListVoices",
 )
 
 

@@ -41,11 +41,39 @@ async def test_grpc_health_check_is_public(grpc_channel: grpc.aio.Channel) -> No
     assert resp.status == health_pb2.HealthCheckResponse.SERVING
 
 
+async def test_grpc_get_info_is_public(
+    grpc_channel: grpc.aio.Channel, test_settings: Settings
+) -> None:
+    stub = tts_pb2_grpc.TTSServiceStub(grpc_channel)
+    resp = await stub.GetInfo(tts_pb2.GetInfoRequest())
+    assert resp.engine == "vieneu-tts+kokoro"
+    assert resp.model == test_settings.vieneu_mode
+    assert resp.sample_rate == test_settings.sample_rate
+    assert resp.native_sample_rate == 48000
+    assert dict(resp.voices) == {
+        "vi_a": test_settings.vi_voice_a,
+        "vi_b": test_settings.vi_voice_b,
+        "en_a": test_settings.en_voice_a,
+        "en_b": test_settings.en_voice_b,
+    }
+
+
 async def test_grpc_rejects_unauthenticated_calls(grpc_channel: grpc.aio.Channel) -> None:
     stub = tts_pb2_grpc.TTSServiceStub(grpc_channel)
     with pytest.raises(grpc.aio.AioRpcError) as exc_info:
         await stub.Synthesize(tts_pb2.SynthesizeRequest(text="Hello"))
     assert exc_info.value.code() == grpc.StatusCode.UNAUTHENTICATED
+
+
+async def test_grpc_list_voices_is_public(
+    grpc_channel: grpc.aio.Channel, test_settings: Settings
+) -> None:
+    stub = tts_pb2_grpc.TTSServiceStub(grpc_channel)
+    resp = await stub.ListVoices(tts_pb2.ListVoicesRequest(lang=tts_pb2.LANGUAGE_EN))
+    assert resp.engine == "vieneu-tts+kokoro"
+    assert len(resp.voices) >= 25
+    assert resp.default_voices["vi"] == test_settings.vi_voice_a
+    assert any(v.id == "Hải Đăng" and "en" in v.languages for v in resp.voices)
 
 
 async def test_grpc_synthesize_unary(
@@ -58,7 +86,7 @@ async def test_grpc_synthesize_unary(
         tts_pb2.SynthesizeRequest(
             text="Xin chao gRPC",
             lang=tts_pb2.LANGUAGE_VI,
-            role=tts_pb2.VOICE_ROLE_A,
+            voice="Ngọc Huyền",
             speed=0.0,  # defaults to 1.0
         ),
         metadata=md,

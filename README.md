@@ -94,6 +94,7 @@ Synchronizes a target `.srt` file against a reference `.srt` or `.aac` file usin
 - Error codes: `400` (empty upload / invalid `ref_type`), `403` (unauthorized), `500` (`ffsubsync` failure/timeout).
 
 ### 3. Health & Readiness Endpoints
+- `GET /v1/info` → `200 {"engine": "vieneu-tts", "model": "v3turbo", "sample_rate": 48000, "native_sample_rate": 48000, "voices": {...}}` (unauthenticated metadata)
 - `GET /health` / `GET /healthz` → `200 {"status": "ok"}` (liveness)
 - `GET /readyz` → `200 {"status": "ready", "engines_loaded": true}` or `503 {"status": "not_ready", "engines_loaded": false}`
 
@@ -117,6 +118,7 @@ Standard health (`grpc.health.v1.Health`) and reflection (`grpc.reflection.v1alp
 
 | RPC | Type | Request | Response | Description |
 |-----|------|---------|----------|-------------|
+| `GetInfo` | Unary (public) | `GetInfoRequest` | `GetInfoResponse` | Returns `engine`, `model`, `sample_rate`, `native_sample_rate`, and `voices`. |
 | `Synthesize` | Unary | `SynthesizeRequest` | `SynthesizeResponse` | Returns complete PCM_16 WAV bytes (`audio_wav`), `sample_rate`, and `duration_seconds`. |
 | `SynthesizeStream` | Server-streaming | `SynthesizeRequest` | `stream AudioChunk` | Streams raw `pcm_s16le` mono chunks (`pcm_data`, `sample_rate`, `is_final`). |
 | `SyncSubtitle` | Unary | `SyncSubtitleRequest` | `SyncSubtitleResponse` | Synchronizes `target_srt` against `reference_data` in a single request (up to `GRPC_MAX_MESSAGE_MB`). |

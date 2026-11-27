@@ -61,9 +61,37 @@ def fake_engine() -> FakeVieneuEngine:
     return FakeVieneuEngine(sample_rate=48000)
 
 
+class FakeKokoroPipeline:
+    """Lightweight test double matching Kokoro KPipeline(text, voice, speed)."""
+
+    def __init__(self) -> None:
+        self.calls: list[tuple[str, str, float]] = []
+
+    def __call__(
+        self, text: str, voice: str = "af_heart", speed: float = 1.0
+    ) -> Iterator[tuple[str, str, np.ndarray]]:
+        self.calls.append((text, voice, speed))
+        # 2 chunks of 0.25s at 24kHz (6000 samples each -> 12000 samples @ 48kHz after resample)
+        yield ("gs", "ps", np.full(6000, 0.25, dtype=np.float32))
+        yield ("gs", "ps", np.full(6000, -0.25, dtype=np.float32))
+
+
 @pytest.fixture
-def tts_service(test_settings: Settings, fake_engine: FakeVieneuEngine) -> TTSService:
-    return TTSService(test_settings, engine=fake_engine)
+def fake_kokoro() -> FakeKokoroPipeline:
+    return FakeKokoroPipeline()
+
+
+@pytest.fixture
+def tts_service(
+    test_settings: Settings,
+    fake_engine: FakeVieneuEngine,
+    fake_kokoro: FakeKokoroPipeline,
+) -> TTSService:
+    return TTSService(
+        test_settings,
+        engine=fake_engine,
+        kokoro_engines={"en_a": fake_kokoro, "en_b": fake_kokoro},
+    )
 
 
 class FakeSubsyncService(SubsyncService):

@@ -20,10 +20,13 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # 3. Copy application source & install package in no-deps mode
 COPY pyproject.toml app.py ./
 COPY proto ./proto
+COPY reference_audio ./reference_audio
 COPY src ./src
 RUN pip install --no-cache-dir --no-deps .
 
 ENV PYTHONUNBUFFERED=1 \
+    GRPC_ENABLE_FORK_SUPPORT=0 \
+    GRPC_VERBOSITY=ERROR \
     HTTP_HOST=0.0.0.0 \
     HTTP_PORT=8000 \
     GRPC_HOST=0.0.0.0 \

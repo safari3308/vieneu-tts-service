@@ -146,6 +146,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/HealthResponse'
 
+  /v1/info:
+    get:
+      summary: Service Metadata & Audio Configuration
+      description: Returns active TTS engine, model, sample rates, and voice role mappings (unauthenticated).
+      responses:
+        '200':
+          description: Active TTS service metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceInfoResponse'
+
   /readyz:
     get:
       summary: Readiness Probe
@@ -218,6 +230,31 @@ components:
         engines_loaded:
           type: boolean
           example: true
+
+    ServiceInfoResponse:
+      type: object
+      properties:
+        engine:
+          type: string
+          example: vieneu-tts
+        model:
+          type: string
+          example: v3turbo
+        sample_rate:
+          type: integer
+          example: 48000
+        native_sample_rate:
+          type: integer
+          example: 48000
+        voices:
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            vi_a: Hải Đăng
+            vi_b: Mai Anh
+            en_a: Hải Đăng
+            en_b: Mai Anh
 
     APIError:
       type: object

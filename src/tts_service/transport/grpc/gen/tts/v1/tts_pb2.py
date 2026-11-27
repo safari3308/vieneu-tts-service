@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10tts/v1/tts.proto\x12\x06tts.v1\"q\n\x11SynthesizeRequest\x12\x0c\n\x04text\x18\x01 \x01(\t\x12\x1e\n\x04lang\x18\x02 \x01(\x0e\x32\x10.tts.v1.Language\x12\x1f\n\x04role\x18\x03 \x01(\x0e\x32\x11.tts.v1.VoiceRole\x12\r\n\x05speed\x18\x04 \x01(\x02\"V\n\x12SynthesizeResponse\x12\x11\n\taudio_wav\x18\x01 \x01(\x0c\x12\x13\n\x0bsample_rate\x18\x02 \x01(\x05\x12\x18\n\x10\x64uration_seconds\x18\x03 \x01(\x02\"E\n\nAudioChunk\x12\x10\n\x08pcm_data\x18\x01 \x01(\x0c\x12\x13\n\x0bsample_rate\x18\x02 \x01(\x05\x12\x10\n\x08is_final\x18\x03 \x01(\x08\"j\n\x13SyncSubtitleRequest\x12\x12\n\ntarget_srt\x18\x01 \x01(\x0c\x12\x16\n\x0ereference_data\x18\x02 \x01(\x0c\x12\'\n\x08ref_type\x18\x03 \x01(\x0e\x32\x15.tts.v1.ReferenceType\"?\n\x14SyncSubtitleMetadata\x12\'\n\x08ref_type\x18\x01 \x01(\x0e\x32\x15.tts.v1.ReferenceType\"\x87\x01\n\x11SyncSubtitleChunk\x12\x30\n\x08metadata\x18\x01 \x01(\x0b\x32\x1c.tts.v1.SyncSubtitleMetadataH\x00\x12\x1a\n\x10target_srt_chunk\x18\x02 \x01(\x0cH\x00\x12\x19\n\x0freference_chunk\x18\x03 \x01(\x0cH\x00\x42\t\n\x07payload\"*\n\x14SyncSubtitleResponse\x12\x12\n\nsynced_srt\x18\x01 \x01(\x0c*F\n\x08Language\x12\x18\n\x14LANGUAGE_UNSPECIFIED\x10\x00\x12\x0f\n\x0bLANGUAGE_VI\x10\x01\x12\x0f\n\x0bLANGUAGE_EN\x10\x02*K\n\tVoiceRole\x12\x1a\n\x16VOICE_ROLE_UNSPECIFIED\x10\x00\x12\x10\n\x0cVOICE_ROLE_A\x10\x01\x12\x10\n\x0cVOICE_ROLE_B\x10\x02*a\n\rReferenceType\x12\x1e\n\x1aREFERENCE_TYPE_UNSPECIFIED\x10\x00\x12\x16\n\x12REFERENCE_TYPE_SUB\x10\x01\x12\x18\n\x14REFERENCE_TYPE_AUDIO\x10\x02\x32\xb2\x02\n\nTTSService\x12\x43\n\nSynthesize\x12\x19.tts.v1.SynthesizeRequest\x1a\x1a.tts.v1.SynthesizeResponse\x12\x43\n\x10SynthesizeStream\x12\x19.tts.v1.SynthesizeRequest\x1a\x12.tts.v1.AudioChunk0\x01\x12I\n\x0cSyncSubtitle\x12\x1b.tts.v1.SyncSubtitleRequest\x1a\x1c.tts.v1.SyncSubtitleResponse\x12O\n\x12SyncSubtitleStream\x12\x19.tts.v1.SyncSubtitleChunk\x1a\x1c.tts.v1.SyncSubtitleResponse(\x01\x42!Z\x1ftts-service/gen/go/tts/v1;ttsv1b\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10tts/v1/tts.proto\x12\x06tts.v1\"\x80\x01\n\x11SynthesizeRequest\x12\x0c\n\x04text\x18\x01 \x01(\t\x12\x1e\n\x04lang\x18\x02 \x01(\x0e\x32\x10.tts.v1.Language\x12\x1f\n\x04role\x18\x03 \x01(\x0e\x32\x11.tts.v1.VoiceRole\x12\r\n\x05speed\x18\x04 \x01(\x02\x12\r\n\x05voice\x18\x05 \x01(\t\"V\n\x12SynthesizeResponse\x12\x11\n\taudio_wav\x18\x01 \x01(\x0c\x12\x13\n\x0bsample_rate\x18\x02 \x01(\x05\x12\x18\n\x10\x64uration_seconds\x18\x03 \x01(\x02\"E\n\nAudioChunk\x12\x10\n\x08pcm_data\x18\x01 \x01(\x0c\x12\x13\n\x0bsample_rate\x18\x02 \x01(\x05\x12\x10\n\x08is_final\x18\x03 \x01(\x08\"j\n\x13SyncSubtitleRequest\x12\x12\n\ntarget_srt\x18\x01 \x01(\x0c\x12\x16\n\x0ereference_data\x18\x02 \x01(\x0c\x12\'\n\x08ref_type\x18\x03 \x01(\x0e\x32\x15.tts.v1.ReferenceType\"?\n\x14SyncSubtitleMetadata\x12\'\n\x08ref_type\x18\x01 \x01(\x0e\x32\x15.tts.v1.ReferenceType\"\x87\x01\n\x11SyncSubtitleChunk\x12\x30\n\x08metadata\x18\x01 \x01(\x0b\x32\x1c.tts.v1.SyncSubtitleMetadataH\x00\x12\x1a\n\x10target_srt_chunk\x18\x02 \x01(\x0cH\x00\x12\x19\n\x0freference_chunk\x18\x03 \x01(\x0cH\x00\x42\t\n\x07payload\"*\n\x14SyncSubtitleResponse\x12\x12\n\nsynced_srt\x18\x01 \x01(\x0c\"\x10\n\x0eGetInfoRequest\"\xc5\x01\n\x0fGetInfoResponse\x12\x0e\n\x06\x65ngine\x18\x01 \x01(\t\x12\r\n\x05model\x18\x02 \x01(\t\x12\x13\n\x0bsample_rate\x18\x03 \x01(\x05\x12\x1a\n\x12native_sample_rate\x18\x04 \x01(\x05\x12\x33\n\x06voices\x18\x05 \x03(\x0b\x32#.tts.v1.GetInfoResponse.VoicesEntry\x1a-\n\x0bVoicesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"]\n\tVoiceInfo\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x11\n\tlanguages\x18\x03 \x03(\t\x12\x0e\n\x06gender\x18\x04 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x05 \x01(\t\"3\n\x11ListVoicesRequest\x12\x1e\n\x04lang\x18\x01 \x01(\x0e\x32\x10.tts.v1.Language\"\xc4\x01\n\x12ListVoicesResponse\x12\x0e\n\x06\x65ngine\x18\x01 \x01(\t\x12!\n\x06voices\x18\x02 \x03(\x0b\x32\x11.tts.v1.VoiceInfo\x12\x45\n\x0e\x64\x65\x66\x61ult_voices\x18\x03 \x03(\x0b\x32-.tts.v1.ListVoicesResponse.DefaultVoicesEntry\x1a\x34\n\x12\x44\x65\x66\x61ultVoicesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01*F\n\x08Language\x12\x18\n\x14LANGUAGE_UNSPECIFIED\x10\x00\x12\x0f\n\x0bLANGUAGE_VI\x10\x01\x12\x0f\n\x0bLANGUAGE_EN\x10\x02*K\n\tVoiceRole\x12\x1a\n\x16VOICE_ROLE_UNSPECIFIED\x10\x00\x12\x10\n\x0cVOICE_ROLE_A\x10\x01\x12\x10\n\x0cVOICE_ROLE_B\x10\x02*a\n\rReferenceType\x12\x1e\n\x1aREFERENCE_TYPE_UNSPECIFIED\x10\x00\x12\x16\n\x12REFERENCE_TYPE_SUB\x10\x01\x12\x18\n\x14REFERENCE_TYPE_AUDIO\x10\x02\x32\xb3\x03\n\nTTSService\x12:\n\x07GetInfo\x12\x16.tts.v1.GetInfoRequest\x1a\x17.tts.v1.GetInfoResponse\x12\x43\n\nListVoices\x12\x19.tts.v1.ListVoicesRequest\x1a\x1a.tts.v1.ListVoicesResponse\x12\x43\n\nSynthesize\x12\x19.tts.v1.SynthesizeRequest\x1a\x1a.tts.v1.SynthesizeResponse\x12\x43\n\x10SynthesizeStream\x12\x19.tts.v1.SynthesizeRequest\x1a\x12.tts.v1.AudioChunk0\x01\x12I\n\x0cSyncSubtitle\x12\x1b.tts.v1.SyncSubtitleRequest\x1a\x1c.tts.v1.SyncSubtitleResponse\x12O\n\x12SyncSubtitleStream\x12\x19.tts.v1.SyncSubtitleChunk\x1a\x1c.tts.v1.SyncSubtitleResponse(\x01\x42!Z\x1ftts-service/gen/go/tts/v1;ttsv1b\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,26 +32,44 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'tts.v1.tts_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'Z\037tts-service/gen/go/tts/v1;ttsv1'
-  _globals['_LANGUAGE']._serialized_start=657
-  _globals['_LANGUAGE']._serialized_end=727
-  _globals['_VOICEROLE']._serialized_start=729
-  _globals['_VOICEROLE']._serialized_end=804
-  _globals['_REFERENCETYPE']._serialized_start=806
-  _globals['_REFERENCETYPE']._serialized_end=903
-  _globals['_SYNTHESIZEREQUEST']._serialized_start=28
-  _globals['_SYNTHESIZEREQUEST']._serialized_end=141
-  _globals['_SYNTHESIZERESPONSE']._serialized_start=143
-  _globals['_SYNTHESIZERESPONSE']._serialized_end=229
-  _globals['_AUDIOCHUNK']._serialized_start=231
-  _globals['_AUDIOCHUNK']._serialized_end=300
-  _globals['_SYNCSUBTITLEREQUEST']._serialized_start=302
-  _globals['_SYNCSUBTITLEREQUEST']._serialized_end=408
-  _globals['_SYNCSUBTITLEMETADATA']._serialized_start=410
-  _globals['_SYNCSUBTITLEMETADATA']._serialized_end=473
-  _globals['_SYNCSUBTITLECHUNK']._serialized_start=476
-  _globals['_SYNCSUBTITLECHUNK']._serialized_end=611
-  _globals['_SYNCSUBTITLERESPONSE']._serialized_start=613
-  _globals['_SYNCSUBTITLERESPONSE']._serialized_end=655
-  _globals['_TTSSERVICE']._serialized_start=906
-  _globals['_TTSSERVICE']._serialized_end=1212
+  _globals['_GETINFORESPONSE_VOICESENTRY']._loaded_options = None
+  _globals['_GETINFORESPONSE_VOICESENTRY']._serialized_options = b'8\001'
+  _globals['_LISTVOICESRESPONSE_DEFAULTVOICESENTRY']._loaded_options = None
+  _globals['_LISTVOICESRESPONSE_DEFAULTVOICESENTRY']._serialized_options = b'8\001'
+  _globals['_LANGUAGE']._serialized_start=1238
+  _globals['_LANGUAGE']._serialized_end=1308
+  _globals['_VOICEROLE']._serialized_start=1310
+  _globals['_VOICEROLE']._serialized_end=1385
+  _globals['_REFERENCETYPE']._serialized_start=1387
+  _globals['_REFERENCETYPE']._serialized_end=1484
+  _globals['_SYNTHESIZEREQUEST']._serialized_start=29
+  _globals['_SYNTHESIZEREQUEST']._serialized_end=157
+  _globals['_SYNTHESIZERESPONSE']._serialized_start=159
+  _globals['_SYNTHESIZERESPONSE']._serialized_end=245
+  _globals['_AUDIOCHUNK']._serialized_start=247
+  _globals['_AUDIOCHUNK']._serialized_end=316
+  _globals['_SYNCSUBTITLEREQUEST']._serialized_start=318
+  _globals['_SYNCSUBTITLEREQUEST']._serialized_end=424
+  _globals['_SYNCSUBTITLEMETADATA']._serialized_start=426
+  _globals['_SYNCSUBTITLEMETADATA']._serialized_end=489
+  _globals['_SYNCSUBTITLECHUNK']._serialized_start=492
+  _globals['_SYNCSUBTITLECHUNK']._serialized_end=627
+  _globals['_SYNCSUBTITLERESPONSE']._serialized_start=629
+  _globals['_SYNCSUBTITLERESPONSE']._serialized_end=671
+  _globals['_GETINFOREQUEST']._serialized_start=673
+  _globals['_GETINFOREQUEST']._serialized_end=689
+  _globals['_GETINFORESPONSE']._serialized_start=692
+  _globals['_GETINFORESPONSE']._serialized_end=889
+  _globals['_GETINFORESPONSE_VOICESENTRY']._serialized_start=844
+  _globals['_GETINFORESPONSE_VOICESENTRY']._serialized_end=889
+  _globals['_VOICEINFO']._serialized_start=891
+  _globals['_VOICEINFO']._serialized_end=984
+  _globals['_LISTVOICESREQUEST']._serialized_start=986
+  _globals['_LISTVOICESREQUEST']._serialized_end=1037
+  _globals['_LISTVOICESRESPONSE']._serialized_start=1040
+  _globals['_LISTVOICESRESPONSE']._serialized_end=1236
+  _globals['_LISTVOICESRESPONSE_DEFAULTVOICESENTRY']._serialized_start=1184
+  _globals['_LISTVOICESRESPONSE_DEFAULTVOICESENTRY']._serialized_end=1236
+  _globals['_TTSSERVICE']._serialized_start=1487
+  _globals['_TTSSERVICE']._serialized_end=1922
 # @@protoc_insertion_point(module_scope)

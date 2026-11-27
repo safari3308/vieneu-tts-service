@@ -8,7 +8,7 @@ from .errors import (
     TTSServiceError,
     ValidationError,
 )
-from .models import Language, ReferenceType, SynthesisResult, VoiceRole
+from .models import Language, ReferenceType, SynthesisResult, VoiceInfo, VoiceRole
 
 __all__ = [
     "AuthenticationError",
@@ -20,5 +20,6 @@ __all__ = [
     "SynthesisResult",
     "TTSServiceError",
     "ValidationError",
+    "VoiceInfo",
     "VoiceRole",
 ]
